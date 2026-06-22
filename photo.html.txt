@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUAD BIKE 01 — Наши фото</title>
+    <style>
+        :root { --orange: #ff4d00; --dark: #0a0a0a; --card-bg: #141414; --text: #e0e0e0; --border: #2a2a2a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--dark); color: var(--text); }
+        .header { text-align: center; padding: 30px 20px; background: #0d0d0d; border-bottom: 1px solid #1a1a1a; }
+        .header h1 { font-size: 2rem; color: #fff; }
+        .header h1 span { color: var(--orange); }
+        .header .back { color: var(--orange); text-decoration: none; font-weight: 700; margin-top: 10px; display: inline-block; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .gallery img { width: 100%; border-radius: 12px; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; transition: 0.3s; }
+        .gallery img:hover { transform: scale(1.03); box-shadow: 0 8px 25px rgba(255,77,0,0.4); }
+
+        /* Лайтбокс */
+        .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .lightbox img { max-width: 95%; max-height: 95%; border-radius: 12px; }
+        .lightbox .close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; }
+        .lightbox .nav { position: absolute; top: 50%; color: #fff; font-size: 2.5rem; cursor: pointer; user-select: none; }
+        .lightbox .prev { left: 20px; }
+        .lightbox .next { right: 20px; }
+        @media (max-width: 600px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📸 <span>Наши фото</span></h1>
+        <a href="index.html" class="back">← На главную</a>
+    </div>
+    <div class="gallery" id="gallery"></div>
+
+    <div class="lightbox" id="lightbox" style="display:none;">
+        <span class="close" onclick="closeLightbox()">✕</span>
+        <span class="nav prev" onclick="prevPhoto()">‹</span>
+        <img id="lightboxImg" src="" alt="Фото">
+        <span class="nav next" onclick="nextPhoto()">›</span>
+    </div>
+
+    <script>
+        const photos = [
+            'https://i.ibb.co/d0Xkz2mV/photo1.jpg','https://i.ibb.co/HfLsKys2/photo2.jpg','https://i.ibb.co/XfRFTKL1/photo3.jpg',
+            'https://i.ibb.co/9kVnYPZs/photo4.jpg','https://i.ibb.co/Z1vV4gbm/photo5.jpg','https://i.ibb.co/rKv2jHL7/photo6.jpg',
+            'https://i.ibb.co/RkyyHymZ/photo-new2.jpg','https://i.ibb.co/6ctPg1LD/photo-new3.jpg','https://i.ibb.co/WNwBBRDZ/photo-new4.jpg',
+            'https://i.ibb.co/TqPsXvZx/photo-new5.jpg','https://i.ibb.co/7Mm6cyB/photo7.jpg','https://i.ibb.co/Psnv0pPH/photo8.jpg',
+            'https://i.ibb.co/R4zv8nNr/photo9.jpg','https://i.ibb.co/W4pD2NnR/photo10.jpg','https://i.ibb.co/1fnyRNZx/photo11.jpg',
+            'https://i.ibb.co/whvs3SGR/photo12.jpg','https://i.ibb.co/Df4Bs51L/photo13.jpg','https://i.ibb.co/tPcxTNPW/photo14.jpg',
+            'https://i.ibb.co/JRnRPgDG/photo15.jpg','https://i.ibb.co/v6sttbZg/photo16.jpg','https://i.ibb.co/kgfVKZH6/photo17.jpg',
+            'https://i.ibb.co/qLTfR9c2/photo18.jpg','https://i.ibb.co/C5JZ7B68/photo19.jpg','https://i.ibb.co/XfP6kxzS/photo20.jpg',
+            'https://i.ibb.co/wZNJXWTh/photo21.jpg','https://i.ibb.co/LXMwHgTm/photo22.jpg','https://i.ibb.co/n853Pz6y/photo23.jpg',
+            'https://i.ibb.co/ymGmkDWy/photo24.jpg','https://i.ibb.co/pBzbyB8P/photo25.jpg','https://i.ibb.co/1YVDYGc2/photo26.jpg',
+            'https://i.ibb.co/0y7K3kMs/photo27.jpg','https://i.ibb.co/C5mzGxm0/photo28.jpg','https://i.ibb.co/8DM5f1KV/photo29.jpg',
+            'https://i.ibb.co/chtxmcWP/photo30.jpg','https://i.ibb.co/cSTt7Fj1/photo31.jpg','https://i.ibb.co/Kcqr3t2k/photo32.jpg',
+            'https://i.ibb.co/vxdKJbNX/photo33.jpg','https://i.ibb.co/tTV1mvyd/photo34.jpg','https://files.catbox.moe/ukcz79.jpeg'
+        ];
+        let currentIndex = 0;
+
+        const gallery = document.getElementById('gallery');
+        photos.forEach((src, i) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = 'Фото ' + (i+1);
+            img.onclick = () => openLightbox(i);
+            gallery.appendChild(img);
+        });
+
+        function openLightbox(i) {
+            currentIndex = i;
+            document.getElementById('lightboxImg').src = photos[i];
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+        function prevPhoto() {
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            document.getElementById('lightboxImg').src = photos[currentIndex];
+        }
+        function nextPhoto() {
+            currentIndex = (currentIndex + 1) % photos.length;
+            document.getElementById('lightboxImg').src = photos[currentIndex];
+        }
+        document.getElementById('lightbox').addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') prevPhoto();
+            if (e.key === 'ArrowRight') nextPhoto();
+        });
+    </script>
+</body>
+</html>

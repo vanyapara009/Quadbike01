@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUAD BIKE 01 — Прокат квадроциклов и эндуро | Адыгея</title>
+    <style>
+        :root {
+            --orange: #ff4d00;
+            --dark: #0a0a0a;
+            --card-bg: #141414;
+            --text: #e0e0e0;
+            --border: #2a2a2a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.75)), url('https://i.ibb.co/d0Xkz2mV/photo1.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .hero .logo { font-size: 0.9rem; letter-spacing: 4px; color: var(--orange); margin-bottom: 12px; text-transform: uppercase; font-weight: 700; }
+        .hero h1 { font-size: clamp(2.4rem, 7vw, 4.2rem); font-weight: 900; text-transform: uppercase; letter-spacing: 2px; line-height: 1.1; margin-bottom: 12px; }
+        .hero h1 .quad { color: #fff; }
+        .hero h1 .enduro { color: var(--orange); }
+        .hero .subtitle { font-size: 1.15rem; color: #ccc; margin-bottom: 8px; font-weight: 500; }
+        .hero .location { font-size: 0.95rem; color: #aaa; margin-bottom: 30px; }
+        .hero .location span { color: var(--orange); }
+        .btn-row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+        .btn {
+            display: inline-block; padding: 16px 36px; background: var(--orange); color: #fff;
+            text-decoration: none; font-weight: 700; font-size: 1.05rem; border-radius: 50px;
+            border: none; cursor: pointer; box-shadow: 0 0 25px rgba(255,77,0,0.4); transition: 0.3s; text-align: center;
+        }
+        .btn:hover { transform: scale(1.04); box-shadow: 0 0 35px rgba(255,77,0,0.7); }
+        .btn-outline { background: transparent; border: 2px solid var(--orange); box-shadow: none; }
+        .btn-outline:hover { background: rgba(255,77,0,0.1); }
+        .btn-green { background: #25d366; box-shadow: 0 0 25px rgba(37,211,102,0.4); }
+        .btn-green:hover { box-shadow: 0 0 35px rgba(37,211,102,0.7); }
+
+        /* SECTIONS */
+        .section { padding: 60px 20px; max-width: 960px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 2rem; font-weight: 800; margin-bottom: 15px; color: #fff; }
+        .section-title span { color: var(--orange); }
+        .section-subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 1rem; }
+
+        /* АНИМАЦИИ */
+        .fade-up { opacity: 0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* INSTAGRAM БЛОК */
+        .insta-block {
+            background: linear-gradient(135deg, #1a1008, #1a0800); border: 2px solid var(--orange);
+            border-radius: 20px; padding: 30px 25px; text-align: center; margin-bottom: 40px;
+        }
+        .insta-block .icon { font-size: 3rem; margin-bottom: 12px; }
+        .insta-block h3 { color: #fff; font-size: 1.4rem; margin-bottom: 8px; }
+        .insta-block p { color: #aaa; margin-bottom: 10px; }
+        .insta-block .promo-code {
+            display: inline-block; background: #1f1f1f; border: 2px dashed var(--orange);
+            color: var(--orange); padding: 10px 25px; border-radius: 10px; font-size: 1.5rem;
+            font-weight: 900; letter-spacing: 3px; margin: 10px 0;
+        }
+
+        /* ТЕХНИКА */
+        .tech-banner {
+            background: linear-gradient(135deg, #1a1008, #1a0a00); border: 1px solid #3a1f0a;
+            border-radius: 20px; padding: 35px 25px; text-align: center; margin-bottom: 50px;
+            position: relative; overflow: hidden;
+        }
+        .tech-banner::before {
+            content: ''; position: absolute; top: -30px; right: -30px;
+            width: 120px; height: 120px; background: var(--orange); opacity: 0.08; border-radius: 50%;
+        }
+        .tech-banner .banner-icon { font-size: 3.5rem; margin-bottom: 15px; }
+        .tech-banner h3 { font-size: 1.6rem; color: #fff; margin-bottom: 10px; }
+        .tech-banner .price-tag { font-size: 2.8rem; font-weight: 900; color: var(--orange); margin: 10px 0; }
+        .tech-banner .price-from { font-size: 1rem; color: #aaa; margin-bottom: 15px; }
+        .tech-banner .in-stock { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 15px; }
+        .tech-banner .stock-item {
+            background: #1f1f1f; border: 1px solid #333; padding: 12px 20px;
+            border-radius: 30px; font-size: 0.9rem; color: #ddd; white-space: nowrap;
+        }
+
+        /* НАВИГАЦИЯ В ГАЛЕРЕИ */
+        .gallery-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 40px; }
+        .gallery-card {
+            background: var(--card-bg); border: 2px solid var(--border); border-radius: 20px;
+            padding: 30px 20px; text-align: center; text-decoration: none; transition: 0.3s;
+        }
+        .gallery-card:hover { border-color: var(--orange); transform: translateY(-5px); }
+        .gallery-card .icon { font-size: 3rem; margin-bottom: 12px; }
+        .gallery-card h3 { color: #fff; font-size: 1.3rem; margin-bottom: 6px; }
+        .gallery-card p { color: #888; font-size: 0.9rem; }
+
+        /* МАРШРУТЫ */
+        .route-grid { display: flex; flex-direction: column; gap: 14px; }
+        .route-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-left: 5px solid #555;
+            border-radius: 14px; padding: 22px 20px; transition: 0.3s; position: relative;
+        }
+        .route-card:hover { border-left-width: 8px; background: #1a1a1a; }
+        .route-card.white { border-left-color: #fff; }
+        .route-card.yellow { border-left-color: #ffc107; }
+        .route-card.green { border-left-color: #4caf50; }
+        .route-card.black { border-left-color: #555; }
+        .route-card.orange { border-left-color: #ff9800; }
+        .route-card.red { border-left-color: #f44336; }
+        .route-card.devil { border-left-color: #9c27b0; }
+        .route-card.waterfall { border-left-color: #00bcd4; }
+        .route-card.summer { border-left-color: #ffeb3b; }
+        .route-card.gold { border-left-color: #ffd700; }
+        .route-card.rufabgo { border-left-color: #2196f3; }
+        .route-card.mezmay { border-left-color: #8bc34a; }
+        .route-card.chinar { border-left-color: #009688; }
+        .route-card.skull { border-left-color: #607d8b; }
+        .route-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+        .route-name { font-size: 1.25rem; font-weight: 700; color: #fff; }
+        .route-price { font-size: 1.3rem; font-weight: 800; color: var(--orange); white-space: nowrap; }
+        .route-desc { font-size: 0.9rem; color: #aaa; line-height: 1.5; }
+        .route-badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; margin-top: 8px; background: #1f1f1f; color: #ccc; }
+        .route-type {
+            position: absolute; top: -10px; right: 20px; background: #1f1f1f; border: 1px solid #333;
+            padding: 5px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .route-type.quad { color: #ff9800; border-color: #ff9800; }
+        .route-type.enduro { color: #4caf50; border-color: #4caf50; }
+
+        /* ТЕЛЕФОНЫ */
+        .phone-numbers { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 30px; }
+        .phone-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+            padding: 25px; text-align: center; min-width: 220px; transition: 0.3s;
+        }
+        .phone-card:hover { border-color: var(--orange); }
+        .phone-card .name { color: #fff; font-weight: 700; font-size: 1.1rem; margin: 10px 0 5px; }
+        .phone-card .number { color: var(--orange); font-size: 1.3rem; font-weight: 800; text-decoration: none; display: block; }
+        .call-btn {
+            display: inline-block; margin-top: 10px; padding: 8px 20px; background: #25d366; color: #fff;
+            border-radius: 20px; text-decoration: none; font-size: 0.85rem; font-weight: 600;
+        }
+
+        /* ОТЗЫВЫ */
+        .reviews-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .review-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 20px; position: relative;
+        }
+        .review-card .stars { color: #ffc107; font-size: 1rem; margin-bottom: 8px; }
+        .review-card .review-text { color: #ccc; font-size: 0.9rem; line-height: 1.5; margin-bottom: 10px; font-style: italic; }
+        .review-card .review-author { color: #888; font-size: 0.8rem; }
+        .review-card .review-source {
+            position: absolute; top: 15px; right: 20px; background: #fc3f1d; color: #fff;
+            padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700;
+        }
+        .review-card .review-source.google { background: #4285f4; }
+        .review-card .review-source.avito { background: #8bc34a; color: #000; }
+
+        /* ДОП. УСЛУГИ */
+        .extra-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .extra-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+            padding: 25px 20px; text-align: center; transition: 0.3s;
+        }
+        .extra-card:hover { border-color: var(--orange); }
+        .extra-card .icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .extra-card h3 { color: #fff; margin-bottom: 6px; }
+        .extra-card p { font-size: 0.85rem; color: #888; }
+
+        /* СКВИЗ */
+        .quiz-section { background: #0d0d0d; padding: 50px 20px; text-align: center; }
+        .quiz-box {
+            max-width: 500px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 22px; padding: 35px 25px;
+        }
+        .quiz-box h2 { margin-bottom: 8px; color: #fff; }
+        .quiz-subtitle { color: #888; margin-bottom: 25px; font-size: 0.9rem; }
+        .quiz-question { margin-bottom: 18px; text-align: left; }
+        .quiz-question label { display: block; font-weight: 600; margin-bottom: 7px; color: #ccc; font-size: 0.9rem; }
+        .quiz-question select, .quiz-question input {
+            width: 100%; padding: 14px 15px; background: #1f1f1f; border: 1px solid #333;
+            border-radius: 10px; color: #fff; font-size: 1rem; appearance: none; -webkit-appearance: none;
+        }
+
+        /* КОНТАКТЫ */
+        .contacts { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .contact-link {
+            display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none;
+            background: var(--card-bg); padding: 16px 25px; border-radius: 14px; border: 1px solid var(--border);
+            width: 100%; max-width: 420px; transition: 0.3s;
+        }
+        .contact-link:hover { border-color: var(--orange); }
+        .map-wrapper {
+            border-radius: 18px; overflow: hidden; border: 1px solid var(--border);
+            margin-top: 20px; width: 100%; max-width: 420px;
+        }
+        .map-wrapper iframe { width: 100%; height: 280px; border: none; display: block; }
+
+        /* REVIEW CTA */
+        .review-cta { text-align: center; padding: 20px; background: #111; border-radius: 14px; margin-top: 20px; }
+        .review-cta p { color: #aaa; margin-bottom: 12px; }
+        .review-cta .btn-sm {
+            display: inline-block; padding: 10px 24px; background: #fc3f1d; color: #fff;
+            text-decoration: none; font-weight: 700; border-radius: 50px; font-size: 0.9rem; margin: 5px;
+        }
+        .review-cta .btn-sm.google { background: #4285f4; }
+
+        /* WHATSAPP FLOAT */
+        .whatsapp-float {
+            position: fixed; bottom: 25px; right: 25px; z-index: 999; background: #25d366; color: #fff;
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; box-shadow: 0 5px 25px rgba(37,211,102,0.5); text-decoration: none; animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,0.5)}
+            50%{box-shadow:0 0 0 20px rgba(37,211,102,0)}
+        }
+
+        footer {
+            text-align: center; padding: 30px 20px; color: #555; font-size: 0.85rem;
+            border-top: 1px solid #1a1a1a;
+        }
+        footer strong { color: #888; }
+
+        @media (max-width: 600px) {
+            .extra-grid, .reviews-grid, .gallery-nav { grid-template-columns: 1fr; }
+            .btn-row { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; }
+            .route-type { position: static; display: inline-block; margin-bottom: 8px; }
+            .tech-banner .in-stock { flex-direction: column; align-items: center; gap: 8px; }
+            .tech-banner .stock-item { width: 100%; max-width: 300px; }
+            .phone-numbers { flex-direction: column; align-items: center; }
+            .phone-card { width: 100%; max-width: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="logo">🏍️ QUAD BIKE 01</div>
+        <h1><span class="quad">Квадроциклы</span><br><span class="enduro">& Эндуро</span></h1>
+        <p class="subtitle">Прокат в Адыгее • Горы • Бездорожье • Адреналин</p>
+        <p class="location">📍 База: <span>Даховская — плато Лаго-Наки</span></p>
+        <div class="btn-row">
+            <a href="#quiz" class="btn">🚀 Подобрать маршрут</a>
+            <a href="photo.html" class="btn btn-outline">📸 Наши фото</a>
+            <a href="video.html" class="btn btn-outline">🎬 Наши видео</a>
+        </div>
+    </section>
+
+    <!-- ===== ПОДПИСКА НА INSTAGRAM ===== -->
+    <section class="section fade-up">
+        <div class="insta-block">
+            <div class="icon">📷</div>
+            <h3>Подпишись на наш Instagram</h3>
+            <p>и забери скидку 10% на первый выезд</p>
+            <div class="promo-code">QUAD10</div>
+            <p style="color:#aaa; font-size:0.9rem; margin-top:8px;">Назови промокод при бронировании — и получи скидку</p>
+            <a href="https://www.instagram.com/quad_bike01/?hl=ru" target="_blank" class="btn" style="margin-top:15px;">📷 Подписаться на @quad_bike01</a>
+            <p style="color:#666; font-size:0.8rem; margin-top:12px;">Актуальные маршруты, видео с покатушек и розыгрыши — в нашем Instagram</p>
+        </div>
+    </section>
+
+    <!-- ===== НОМЕРА ДЛЯ СВЯЗИ ===== -->
+    <section class="section fade-up">
+        <h2 class="section-title">📞 <span>Свяжитесь с нами</span></h2>
+        <p class="section-subtitle">Звоните или пишите в WhatsApp — ответим за 2 минуты</p>
+        <div class="phone-numbers">
+            <div class="phone-card">
+                <img src="https://i.ibb.co/pv8S0zqv/ivan.jpg" alt="Иван" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:12px;border:3px solid var(--orange);">
+                <div class="name">👤 Иван</div>
+                <a href="tel:+79954988005" class="number">+7 (995) 498-80-05</a>
+                <a href="https://wa.me/79954988005?text=Привет!%20Хочу%20покататься!" class="call-btn" target="_blank">💬 WhatsApp</a>
+            </div>
+            <div class="phone-card">
+                <img src="https://i.ibb.co/67mRTJBy/alexandr.jpg" alt="Александр" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:12px;border:3px solid var(--orange);">
+                <div class="name">👤 Александр</div>
+                <a href="tel:+79884760352" class="number">+7 (988) 476-03-52</a>
+                <a href="https://wa.me/79884760352?text=Привет!%20Хочу%20покататься!" class="call-btn" target="_blank">💬 WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== НАВИГАЦИЯ В ГАЛЕРЕИ ===== -->
+    <section class="section fade-up">
+        <h2 class="section-title">📸🎬 <span>Галерея</span></h2>
+        <p class="section-subtitle">Смотрите фото и видео с наших покатушек</p>
+        <div class="gallery-nav">
+            <a href="photo.html" class="gallery-card">
+                <div class="icon">📸</div>
+                <h3>Наши фото</h3>
+                <p>28 фото с маршрутов</p>
+            </a>
+            <a href="video.html" class="gallery-card">
+                <div class="icon">🎬</div>
+                <h3>Наши видео</h3>
+                <p>6 видео с покатушек</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== ЭНДУРО И ПИТБАЙКИ ===== -->
+    <section class="section fade-up" id="enduro">
+        <h2 class="section-title">🏍️ <span>Эндуро мотоциклы и Питбайки</span></h2>
+        <p class="section-subtitle">В наличии — разная техника под любой рост и опыт</p>
+        <div class="tech-banner">
+            <div class="banner-icon">🏍️💨</div>
+            <h3>Цена на эндуро и питбайки</h3>
+            <div class="price-tag">от 2500₽</div>
+            <div class="price-from">за час • инструктаж включён • экипировка в комплекте</div>
+            <div class="in-stock">
+                <div class="stock-item">🏁 Питбайки (полуавтомат / механика)</div>
+                <div class="stock-item">🏍️ Эндуро среднеразмерные</div>
+                <div class="stock-item">💪 Эндуро полноразмерные 300 куб.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== МАРШРУТЫ НА КВАДРОЦИКЛАХ ===== -->
+    <section class="section fade-up" id="routes-quad">
+        <h2 class="section-title">🛞 <span>Маршруты на квадроциклах</span></h2>
+        <p class="section-subtitle">10 проработанных маршрутов — от новичка до профи</p>
+        <div class="route-grid">
+            <div class="route-card white">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">⚪ Белый</span><span class="route-price">2000₽</span></div>
+                <p class="route-desc">Обучающий маршрут. Лёгкий рельеф, без экстрима. Смотровая на высоте 1000м — вид на Кавказский заповедник и станицу Даховскую.</p>
+                <span class="route-badge">🟢 Лёгкий</span>
+            </div>
+            <div class="route-card yellow">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">🟡 Жёлтый</span><span class="route-price">3000₽</span></div>
+                <p class="route-desc">Лёгкое бездорожье, 2 смотровые с панорамой. Между скалистым обрывом и фруктовым садом. Сложность зависит от погоды.</p>
+                <span class="route-badge">🟡 Зависит от погоды</span>
+            </div>
+            <div class="route-card green">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">🟢 Зелёный</span><span class="route-price">5000₽</span></div>
+                <p class="route-desc">Белый + ещё одна смотровая через пересечённую лесистую местность. Грязевая колея, извилистая дорога. Средняя сложность.</p>
+                <span class="route-badge">🟠 Средний</span>
+            </div>
+            <div class="route-card black">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">⚫ Чёрный</span><span class="route-price">9000₽</span></div>
+                <p class="route-desc">Белый + Зелёный + большой круг в горах на высоте 1000–1200м. Дух захватывает. Нужны навыки, есть возрастные ограничения.</p>
+                <span class="route-badge">🔴 Сложный</span>
+            </div>
+            <div class="route-card orange">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">🟠 Оранжевый</span><span class="route-price">7000₽</span></div>
+                <p class="route-desc">База → скала Парус → обратно. Через каньон Руфабго. Крутые спуски/подъёмы, болотистая местность. Живописные пейзажи.</p>
+                <span class="route-badge">🔴 Высокий</span>
+            </div>
+            <div class="route-card red">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">🔴 Красный</span><span class="route-price">11000₽</span></div>
+                <p class="route-desc">Оранжевый до скалы Парус + ущелье Мишоко (экстрим-парк). Маршрут может корректироваться по погоде или желанию клиента.</p>
+                <span class="route-badge">🔴 Максимальный</span>
+            </div>
+            <div class="route-card devil">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">🟣 Чёртов палец</span><span class="route-price">15000₽ / 25000₽</span></div>
+                <p class="route-desc">На весь день. 18+. Смотровые, речки, извилистые дороги, прямые участки для разгона. Старт из Каменномостского — 15000₽ (до 150кг). Старт с нашей базы — 25000₽.</p>
+                <span class="route-badge">🔴 Сложный • 18+</span>
+            </div>
+            <div class="route-card waterfall">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">💧 Усть-Сахрайские водопады</span><span class="route-price">15000₽</span></div>
+                <p class="route-desc">Старт и финиш — Даховская. 45км. Несколько водопадов, дважды пересекаем реку. Возможен пикник у воды. Летом берите купальник! Бронировать заранее.</p>
+                <span class="route-badge">💧 С переправой • 45км</span>
+            </div>
+            <div class="route-card summer">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">☀️ Летний кайф</span><span class="route-price">15000₽</span></div>
+                <p class="route-desc">Каньон Руфабго → Красный маршрут → Каменномостский → карьер. Купание, пикник. Крутые обрывы, лужи, речка. От 4 часов. До 150кг на квадрик.</p>
+                <span class="route-badge">💦 С купанием • От 4ч</span>
+            </div>
+            <div class="route-card gold">
+                <span class="route-type quad">Квадро</span>
+                <div class="route-header"><span class="route-name">🥇 Золотой</span><span class="route-price">14000₽</span></div>
+                <p class="route-desc">Строго 1 человек на квадроцикле. Вверх против течения Руфабго, леса, поля, высота 1000м+. Пещеры Духан и Саксофон. 3–5 часов.</p>
+                <span class="route-badge">🥇 Соло • Пещеры</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== МАРШРУТЫ НА ЭНДУРО ===== -->
+    <section class="section fade-up" id="routes-enduro">
+        <h2 class="section-title">🏍️ <span>Маршруты на эндуро</span></h2>
+        <p class="section-subtitle">Для тех, кто выбирает два колеса и полную свободу</p>
+        <div class="route-grid">
+            <div class="route-card devil">
+                <span class="route-type enduro">Эндуро</span>
+                <div class="route-header"><span class="route-name">🟣 Чёртов палец</span><span class="route-price">от 2500₽/час</span></div>
+                <p class="route-desc">Легендарный маршрут. Смотровые на Кавказский заповедник, горные речки, извилистые подъёмы и спуски. Прямые участки — можно разогнаться. 18+</p>
+                <span class="route-badge">🔴 Сложный • 18+</span>
+            </div>
+            <div class="route-card rufabgo">
+                <span class="route-type enduro">Эндуро</span>
+                <div class="route-header"><span class="route-name">💦 Водопады Руфабго</span><span class="route-price">от 2500₽/час</span></div>
+                <p class="route-desc">Каньон реки Руфабго — каскад водопадов, броды, техничные подъёмы. Один из самых зрелищных маршрутов Адыгеи.</p>
+                <span class="route-badge">💧 Водопады • Броды</span>
+            </div>
+            <div class="route-card mezmay">
+                <span class="route-type enduro">Эндуро</span>
+                <div class="route-header"><span class="route-name">🦅 Мезмай — Орлиная полка</span><span class="route-price">от 2500₽/час</span></div>
+                <p class="route-desc">Путь к знаменитой смотровой «Орлиная полка». Захватывающие виды на ущелье и горы. Пересечённая местность, лесные тропы.</p>
+                <span class="route-badge">🦅 Панорама • Горы</span>
+            </div>
+            <div class="route-card chinar">
+                <span class="route-type enduro">Эндуро</span>
+                <div class="route-header"><span class="route-name">🌿 Чинарский и Университетский водопады</span><span class="route-price">от 2500₽/час</span></div>
+                <p class="route-desc">Два водопада за один выезд. Грунтовые подъёмы, броды, лесные тропы.</p>
+                <span class="route-badge">💧 Два водопада</span>
+            </div>
+            <div class="route-card skull">
+                <span class="route-type enduro">Эндуро</span>
+                <div class="route-header"><span class="route-name">💀 Грот Череп</span><span class="route-price">от 2500₽/час</span></div>
+                <p class="route-desc">Популярный маршрут к загадочному гроту. Техничная дорога через лес и каменистые участки. Атмосферное место для фото.</p>
+                <span class="route-badge">💀 Атмосферный • Фото</span>
+            </div>
+            <div style="background: var(--card-bg); border: 2px dashed #333; border-radius: 14px; padding: 25px; text-align: center; margin-top: 5px;">
+                <p style="font-size: 1.1rem; color: #fff; margin-bottom: 8px;">🏍️ И множество других маршрутов!</p>
+                <p style="color: #888; font-size: 0.9rem;">Плато Лаго-Наки, Гранитный каньон, Хаджохская теснина, гора Физиабго и другие. Маршрут подбирается индивидуально.</p>
+                <a href="#quiz" class="btn" style="margin-top: 15px; padding: 12px 28px; font-size: 0.95rem;">Узнать подробнее</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ОТЗЫВЫ ===== -->
+    <section class="section fade-up" id="reviews">
+        <h2 class="section-title">⭐ <span>Отзывы клиентов</span></h2>
+        <p class="section-subtitle">Реальные отзывы с Яндекс Карт, Google и 2ГИС</p>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <span class="review-source">Яндекс</span>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">«Катались с друзьями маршрут Чёртов палец. Это просто бомба! Инструктор Денис — профессионал, всё объяснил. Виды открываются нереальные, вернёмся ещё!»</p>
+                <p class="review-author">— Сергей К., сентябрь 2025</p>
+            </div>
+            <div class="review-card">
+                <span class="review-source google">Google</span>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">«Брали квадроцикл на целый день с девушкой. Очень понравилось! Техника в отличном состоянии, маршруты живописные. Отдельное спасибо за трансфер от отеля!»</p>
+                <p class="review-author">— Анна М., август 2025</p>
+            </div>
+            <div class="review-card">
+                <span class="review-source">Яндекс</span>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">«Первый раз на питбайке — думал будет сложно. Но инструктор всё показал, через 15 минут уже гонял по лесу. Рекомендую новичкам!»</p>
+                <p class="review-author">— Игорь В., октябрь 2025</p>
+            </div>
+            <div class="review-card">
+                <span class="review-source avito">2ГИС</span>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">«Летний кайф — лучший маршрут! Купались в карьере, жарили шашлык, гоняли по грязи. Эмоций на год вперёд. Обязательно приедем снова!»</p>
+                <p class="review-author">— Ольга и Максим, июль 2025</p>
+            </div>
+        </div>
+        <div class="review-cta">
+            <p>👍 Понравилось? Оставьте отзыв — получите скидку 500₽ на следующий выезд!</p>
+            <a href="https://yandex.ru/maps/org/quadbike01/155112252175/reviews/?ll=40.121033%2C44.015348&tab=reviews&z=9" target="_blank" class="btn-sm">Оставить отзыв на Яндексе</a>
+            <a href="https://g.page/quadbike01" target="_blank" class="btn-sm google">Оставить отзыв в Google</a>
+        </div>
+    </section>
+
+    <!-- ===== ДОП. УСЛУГИ ===== -->
+    <section class="section fade-up">
+        <h2 class="section-title">➕ <span>Дополнительные услуги</span></h2>
+        <div class="extra-grid">
+            <div class="extra-card">
+                <div class="icon">🚐</div>
+                <h3>Трансфер</h3>
+                <p>Заберём от отеля, довезём до базы и обратно. Цена зависит от удалённости (уточнять дополнительно).</p>
+            </div>
+            <div class="extra-card">
+                <div class="icon">📸</div>
+                <h3>Фотограф</h3>
+                <p>Выезжает с вами на маршрут. Запечатлеет эмоции и лучшие моменты поездки (обговаривается отдельно).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== СКВИЗ-ОПРОС ===== -->
+    <section class="quiz-section" id="quiz">
+        <div class="quiz-box fade-up">
+            <h2>🎯 Подобрать маршрут</h2>
+            <p class="quiz-subtitle">3 вопроса — и мы отправим расчёт в WhatsApp</p>
+            <div class="quiz-question">
+                <label>👥 Сколько человек?</label>
+                <select id="qPeople"><option value="1">1 человек</option><option value="2">2 человека</option><option value="3">3 человека</option><option value="4+">4 и больше</option></select>
+            </div>
+            <div class="quiz-question">
+                <label>🏍️ Какой транспорт интересует?</label>
+                <select id="qTransport"><option value="Квадроцикл">Квадроцикл</option><option value="Эндуро / Питбайк">Эндуро / Питбайк</option><option value="Посоветуйте">Посоветуйте</option></select>
+            </div>
+            <div class="quiz-question">
+                <label>🎯 Какой опыт?</label>
+                <select id="qExp"><option value="Новичок">Новичок (впервые)</option><option value="Есть опыт">Есть опыт (катался пару раз)</option><option value="Профи">Профи (уверенно управляю)</option></select>
+            </div>
+            <div class="quiz-question">
+                <label>📞 Ваше имя</label>
+                <input type="text" id="qName" placeholder="Как к вам обращаться?">
+            </div>
+            <button class="btn quiz-btn" onclick="sendToWhatsApp()">📲 Отправить в WhatsApp</button>
+        </div>
+    </section>
+
+    <!-- ===== КОНТАКТЫ ===== -->
+    <section class="section fade-up">
+        <h2 class="section-title">📬 <span>Контакты</span></h2>
+        <div class="contacts">
+            <a href="https://www.instagram.com/quad_bike01/?hl=ru" target="_blank" class="contact-link">
+                <span style="font-size:1.5rem;">📷</span> <span>@quad_bike01</span>
+            </a>
+            <a href="https://yandex.ru/maps/org/quadbike01/155112252175/?ll=40.121033%2C44.015348&z=9" target="_blank" class="contact-link">
+                <span style="font-size:1.5rem;">⭐</span> <span>Отзывы на Яндекс.Картах</span>
+            </a>
+            <a href="https://yandex.ru/maps/org/quadbike01/155112252175/?ll=40.121033%2C44.015348&z=9" target="_blank" class="contact-link">
+                <span style="font-size:1.5rem;">📍</span> <span>Даховская — плато Лаго-Наки</span>
+            </a>
+            <div class="map-wrapper">
+                <iframe src="https://yandex.ru/map-widget/v1/?ll=40.121033%2C44.015348&z=13&pt=40.121033,44.015348,pm2rdm" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        © 2025 <strong>QUAD BIKE 01</strong> • Даховская, Адыгея<br>
+        🛞 Квадроциклы &amp; 🏍️ Эндуро • Все маршруты с инструктором • Работаем каждый день
+    </footer>
+
+    <!-- ===== WHATSAPP FLOAT ===== -->
+    <a href="https://wa.me/79954988005?text=Привет!%20Хочу%20покататься!" class="whatsapp-float" target="_blank">💬</a>
+
+    <script>
+        // Анимация появления при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Сквиз в WhatsApp
+        function sendToWhatsApp() {
+            const people = document.getElementById('qPeople').value;
+            const transport = document.getElementById('qTransport').value;
+            const exp = document.getElementById('qExp').value;
+            const name = document.getElementById('qName').value || 'Гость';
+            const message = `Привет, QUAD BIKE 01! 🏍️%0A%0A👤 Имя: ${name}%0A👥 Человек: ${people}%0A🚜 Транспорт: ${transport}%0A🏍️ Опыт: ${exp}%0A%0AПодберите маршрут и рассчитайте стоимость!`;
+            window.open(`https://wa.me/79954988005?text=${message}`, '_blank');
+        }
+    </script>
+</body>
+</html>
